@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="centerstage">
+  {% for fillup in fillup_list %}
+  <div class="fillup">
+    <h1>{{ fillup.test_mpg }}</h1>
+    <div class="date">
+      <p>Published on: {{ fillup.date|date:"d M Y"}}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
