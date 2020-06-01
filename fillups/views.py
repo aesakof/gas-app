@@ -6,4 +6,6 @@ from fillups.models import Fillup, Car
 # Create your views here.
 class FillupListView(ListView):
     model = Fillup
-    # template_name = 'stuff.html'
+
+class CarListView(ListView):
+    model = Car
