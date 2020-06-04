@@ -2,15 +2,31 @@
 
 {% block content %}
 <div class="centerstage">
-  {% for car in car_list %}
-  <div class="fillup">
-    <h1>{{ car.name }}</h1>
-    <p>Make: {{ car.make }}</p>
-    <p>Model: {{ car.model }}</p>
-    <p>Model Year: {{ car.model_year }}</p>
-    <p>Status: {{ car.status }}</p>
-  </div>
-  {% endfor %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Car Name</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Model Year</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for car in car_list %}
+        <tr>
+          <div class="fillup">
+            <td>{{ car.name }}</td>
+            <td>{{ car.make }}</td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.model_year }}</td>
+            <td>{{ car.status }}</td>
+          </div>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
 </div>
 
 {% endblock %}

@@ -2,14 +2,36 @@
 
 {% block content %}
 <div class="centerstage">
-  {% for fillup in fillup_list %}
-  <div class="fillup">
-    <h1>{{ fillup.test_mpg }}</h1>
-    <div class="date">
-      <p>Published on: {{ fillup.date|date:"d M Y"}}</p>
-    </div>
-  </div>
-  {% endfor %}
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Car</th>
+        <th>Price (per gallon)</th>
+        <th>Trip Distance</th>
+        <th>Gallons Filled</th>
+        <th>Total Sale</th>
+        <th>MPG</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fillup in fillup_list %}
+        <tr>
+          <div class="fillup">
+            <td>{{ fillup.date|date:"d M Y"}}</td>
+            <td>{{ fillup.car }}</td>
+            <td>{{ fillup.price_per_gallon }}</td>
+            <td>{{ fillup.trip_distance }}</td>
+            <td>{{ fillup.gallons }}</td>
+            <td>{{ fillup.total_sale }}</td>
+            <td>{{ fillup.mpg }}</td>
+          </div>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
 </div>
 
 {% endblock %}

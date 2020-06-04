@@ -14,11 +14,10 @@ class Fillup(models.Model):
     trip_distance = models.FloatField()
     gallons = models.FloatField()
     total_sale = models.FloatField()
-    mpg = models.FloatField()
     car = models.ForeignKey('Car',on_delete=models.CASCADE)
 
     @property
-    def test_mpg(self):
+    def mpg(self):
         return self.trip_distance/self.gallons
 
 
