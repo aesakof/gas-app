@@ -7,9 +7,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 class FillupListView(ListView):
     model = Fillup
+    context_object_name = 'fillup_list'
+    ordering = ['-date']
+
+    # def get_queryset(self):
+    #     return Fillup.objects.filter(user=self.request.user)
 
 class CarListView(ListView):
     model = Car
+    ordering = ['name']
 
 class NewFillup(LoginRequiredMixin,CreateView):
     model = Fillup
