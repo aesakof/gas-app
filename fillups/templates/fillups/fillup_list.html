@@ -6,6 +6,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Username</th>
         <th>Date</th>
         <th>Car</th>
         <th>Price (per gallon)</th>
@@ -19,6 +20,7 @@
       {% for fillup in fillup_list %}
         <tr>
           <div class="fillup">
+            <td>{{ fillup.username }}</td>
             <td>{{ fillup.date|date:"d M Y"}}</td>
             <td>{{ fillup.car }}</td>
             <td>{{ fillup.price_per_gallon }}</td>

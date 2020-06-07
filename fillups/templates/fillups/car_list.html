@@ -5,6 +5,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Username</th>
         <th>Car Name</th>
         <th>Make</th>
         <th>Model</th>
@@ -15,7 +16,8 @@
     <tbody>
       {% for car in car_list %}
         <tr>
-          <div class="fillup">
+          <div class="car">
+            <td>{{ car.username }}</td>
             <td>{{ car.name }}</td>
             <td>{{ car.make }}</td>
             <td>{{ car.model }}</td>
