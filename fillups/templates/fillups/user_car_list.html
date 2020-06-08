@@ -2,29 +2,32 @@
 
 {% block content %}
 <div class="centerstage">
+  <h1>My Cars</h1>
   <table class="table">
     <thead>
       <tr>
-        <th>Username</th>
         <th>Car Name</th>
         <th>Make</th>
         <th>Model</th>
         <th>Model Year</th>
         <th>Status</th>
+        <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      {% for car in car_list %}
-        <tr>
-          <div class="car">
-            <td>{{ car.username }}</td>
+      {% for car in user_car_list %}
+        <div class="car">
+          <tr>
             <td>{{ car.name }}</td>
             <td>{{ car.make }}</td>
             <td>{{ car.model }}</td>
             <td>{{ car.model_year }}</td>
             <td>{{ car.status }}</td>
-          </div>
-        </tr>
+            <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' pk=car.pk %}">Edit</a></td>
+            <td><a class="btn btn-danger" href="#">Delete</a></td>
+          </tr>
+        </div>
       {% endfor %}
     </tbody>
   </table>

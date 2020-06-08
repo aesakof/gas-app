@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="centerstage">
+  <h1>All Cars</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Car Name</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Model Year</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for car in all_car_list %}
+        <div class="car">
+          <tr>
+            <td>{{ car.username }}</td>
+            <td>{{ car.name }}</td>
+            <td>{{ car.make }}</td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.model_year }}</td>
+            <td>{{ car.status }}</td>
+          </tr>
+        </div>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}

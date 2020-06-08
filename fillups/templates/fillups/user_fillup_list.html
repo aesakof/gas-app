@@ -2,11 +2,10 @@
 
 {% block content %}
 <div class="centerstage">
-
+  <h1>My Fillups</h1>
   <table class="table">
     <thead>
       <tr>
-        <th>Username</th>
         <th>Date</th>
         <th>Car</th>
         <th>Price (per gallon)</th>
@@ -14,13 +13,14 @@
         <th>Gallons Filled</th>
         <th>Total Sale</th>
         <th>MPG</th>
+        <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      {% for fillup in fillup_list %}
-        <tr>
-          <div class="fillup">
-            <td>{{ fillup.username }}</td>
+      {% for fillup in user_fillup_list %}
+        <div class="fillup">
+          <tr>
             <td>{{ fillup.date|date:"d M Y"}}</td>
             <td>{{ fillup.car }}</td>
             <td>{{ fillup.price_per_gallon }}</td>
@@ -28,8 +28,10 @@
             <td>{{ fillup.gallons }}</td>
             <td>{{ fillup.total_sale }}</td>
             <td>{{ fillup.mpg }}</td>
-          </div>
-        </tr>
+            <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' pk=fillup.pk %}">Edit</a></td>
+            <td><a class="btn btn-danger" href="#">Delete</a></td>
+          </tr>
+        </div>
       {% endfor %}
     </tbody>
   </table>

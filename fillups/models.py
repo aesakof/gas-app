@@ -8,7 +8,7 @@ next_year = datetime.today().year+1
 last_30_years = list(range(next_year-30, next_year))
 MODEL_YEARS = [(i,j) for i,j in zip(last_30_years,last_30_years)]
 
-STATUS = [(True, 'Active'), (False, 'Inactive')]
+STATUS = [('Active', 'Active'), ('Inactive', 'Inactive')]
 
 # Create your models here.
 class Fillup(models.Model):
@@ -34,7 +34,7 @@ class Car(models.Model):
     make = models.CharField(max_length=25)
     model = models.CharField(max_length=25)
     model_year = models.IntegerField(choices=MODEL_YEARS)
-    status = models.BooleanField(choices=STATUS)
+    status = models.CharField(max_length=10,choices=STATUS,default='Active')
 
     def __str__(self):
         return self.name
