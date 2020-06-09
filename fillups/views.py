@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import (TemplateView,ListView,DetailView,
                                     CreateView,UpdateView,DeleteView)
+from django.urls import reverse_lazy
 from fillups.models import Fillup, Car
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . import forms
@@ -39,7 +40,7 @@ class AllCarListView(ListView):
 class NewFillup(LoginRequiredMixin,CreateView):
     model = Fillup
     form_class = forms.FillupForm
-    redirect_field_name = 'fillup_list'
+    redirect_field_name = 'fillups:fillup_list'
 
     def form_valid(self, form):
         form.instance.username = self.request.user
@@ -53,7 +54,7 @@ class NewFillup(LoginRequiredMixin,CreateView):
 class UpdateFillup(LoginRequiredMixin,UpdateView):
     model = Fillup
     form_class = forms.FillupForm
-    redirect_field_name = 'fillup_list'
+    redirect_field_name = 'fillups:fillup_list'
 
     def form_valid(self, form):
         form.instance.username = self.request.user
@@ -64,10 +65,14 @@ class UpdateFillup(LoginRequiredMixin,UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+class FillupDeleteView(LoginRequiredMixin,DeleteView):
+    model = Fillup
+    success_url = reverse_lazy('fillups:user_fillup_list')
+
 class NewCar(LoginRequiredMixin,CreateView):
     model = Car
     form_class = forms.CarForm
-    redirect_field_name = 'car_list'
+    redirect_field_name = 'fillups:car_list'
 
     def form_valid(self, form):
         form.instance.username = self.request.user
@@ -76,8 +81,12 @@ class NewCar(LoginRequiredMixin,CreateView):
 class UpdateCar(LoginRequiredMixin,UpdateView):
     model = Car
     form_class = forms.CarForm
-    redirect_field_name = 'car_list'
+    redirect_field_name = 'fillups:user_car_list'
 
     def form_valid(self, form):
         form.instance.username = self.request.user
         return super().form_valid(form)
+
+class CarDeleteView(LoginRequiredMixin,DeleteView):
+    model = Car
+    success_url = reverse_lazy('fillups:user_car_list')
