@@ -28,7 +28,7 @@
       </div>
       <div class="navbar-nav ml-auto">
         {% if user.is_authenticated %}
-          <a class="nav-item nav-link" href="#" class="btn btn-simple">My Profile</a>
+          <a class="nav-item nav-link" href="{% url 'fillups:user_profile' %}" class="btn btn-simple">My Profile</a>
           <a class="nav-item nav-link" href="{% url 'accounts:logout' %}" class="btn btn-simple">Log out</a>
         {% else %}
           <a class="nav-item nav-link" href="{% url 'accounts:login' %}" class="btn btn-simple">Log in</a>

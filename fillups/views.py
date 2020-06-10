@@ -3,10 +3,20 @@ from django.views.generic import (TemplateView,ListView,DetailView,
                                     CreateView,UpdateView,DeleteView)
 from django.urls import reverse_lazy
 from fillups.models import Fillup, Car
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import forms
 
+
+class TestUserOfObject(UserPassesTestMixin):
+    def test_func(self):
+        self.object = self.get_object()
+        return self.request.user == self.object.username
+
 # Create your views here.
+class UserProfile(TemplateView):
+    template_name = 'fillups/user_profile.html'
+
+
 class UserFillupListView(ListView):
     template_name = 'fillups/user_fillup_list.html'
     model = Fillup
@@ -21,6 +31,38 @@ class AllFillupListView(ListView):
     model = Fillup
     context_object_name = 'all_fillup_list'
     ordering = ['-date']
+
+class NewFillup(LoginRequiredMixin,CreateView):
+    model = Fillup
+    form_class = forms.FillupForm
+    redirect_field_name = 'fillups:fillup_list'
+
+    def form_valid(self, form):
+        form.instance.username = self.request.user
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+class UpdateFillup(LoginRequiredMixin,TestUserOfObject,UpdateView):
+    model = Fillup
+    form_class = forms.FillupForm
+    redirect_field_name = 'fillups:fillup_list'
+
+    def form_valid(self, form):
+        form.instance.username = self.request.user
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+class FillupDeleteView(LoginRequiredMixin,TestUserOfObject,DeleteView):
+    model = Fillup
+    success_url = reverse_lazy('fillups:user_fillup_list')
 
 class UserCarListView(ListView):
     template_name = 'fillups/user_car_list.html'
@@ -37,38 +79,6 @@ class AllCarListView(ListView):
     context_object_name = 'all_car_list'
     ordering = ['name']
 
-class NewFillup(LoginRequiredMixin,CreateView):
-    model = Fillup
-    form_class = forms.FillupForm
-    redirect_field_name = 'fillups:fillup_list'
-
-    def form_valid(self, form):
-        form.instance.username = self.request.user
-        return super().form_valid(form)
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-class UpdateFillup(LoginRequiredMixin,UpdateView):
-    model = Fillup
-    form_class = forms.FillupForm
-    redirect_field_name = 'fillups:fillup_list'
-
-    def form_valid(self, form):
-        form.instance.username = self.request.user
-        return super().form_valid(form)
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-class FillupDeleteView(LoginRequiredMixin,DeleteView):
-    model = Fillup
-    success_url = reverse_lazy('fillups:user_fillup_list')
-
 class NewCar(LoginRequiredMixin,CreateView):
     model = Car
     form_class = forms.CarForm
@@ -78,7 +88,7 @@ class NewCar(LoginRequiredMixin,CreateView):
         form.instance.username = self.request.user
         return super().form_valid(form)
 
-class UpdateCar(LoginRequiredMixin,UpdateView):
+class UpdateCar(LoginRequiredMixin,TestUserOfObject,UpdateView):
     model = Car
     form_class = forms.CarForm
     redirect_field_name = 'fillups:user_car_list'
@@ -87,6 +97,6 @@ class UpdateCar(LoginRequiredMixin,UpdateView):
         form.instance.username = self.request.user
         return super().form_valid(form)
 
-class CarDeleteView(LoginRequiredMixin,DeleteView):
+class CarDeleteView(LoginRequiredMixin,TestUserOfObject,DeleteView):
     model = Car
     success_url = reverse_lazy('fillups:user_car_list')

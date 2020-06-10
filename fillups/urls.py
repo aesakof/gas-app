@@ -4,6 +4,7 @@ from fillups import views
 app_name = 'fillups'
 
 urlpatterns = [
+    path('myprofile/',views.UserProfile.as_view(),name='user_profile'),
     path('myprofile/fillups/',views.UserFillupListView.as_view(),name='user_fillup_list'),
     path('myprofile/cars/',views.UserCarListView.as_view(),name='user_car_list'),
     path('all/fillups/',views.AllFillupListView.as_view(),name='all_fillup_list'),
