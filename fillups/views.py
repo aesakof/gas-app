@@ -2,7 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import (TemplateView,ListView,DetailView,
                                     CreateView,UpdateView,DeleteView)
 from django.urls import reverse_lazy
+from django.db.models import Sum, Avg, F, Func
 from fillups.models import Fillup, Car
+from statistics import mean
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import forms
 
@@ -16,6 +18,24 @@ class TestUserOfObject(UserPassesTestMixin):
 class UserProfile(TemplateView):
     template_name = 'fillups/user_profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(UserProfile, self).get_context_data(**kwargs)
+        bunch_of_stats = {
+            'total_cars': Car.objects.filter(username=self.request.user).count(),
+            'total_fillups': Fillup.objects.filter(username=self.request.user).count(),
+            'total_distance': Fillup.objects.filter(username=self.request.user).aggregate(Sum('trip_distance')),
+            'total_gallons': Fillup.objects.filter(username=self.request.user).aggregate(total_gallons = Round(Sum('gallons'),4)),
+            'avg_price': Fillup.objects.filter(username=self.request.user).aggregate(avg_price = Round(Avg('price_per_gallon'),3)),
+            'total_spent': sum_total_sale(Fillup.objects.filter(username=self.request.user)),
+            'avg_mpg': avg_mpg(Fillup.objects.filter(username=self.request.user))
+        }
+        context['stats'] = bunch_of_stats
+        context['active_cars'] = Car.objects.filter(status='Active').filter(username=self.request.user)
+        context['last_10_fillups'] = Fillup.objects.filter(username=self.request.user).order_by('-date')[:10]
+        return context
+
+class UserStatsView(TemplateView):
+    template_name = 'fillups/user_stats.html'
 
 class UserFillupListView(ListView):
     template_name = 'fillups/user_fillup_list.html'
@@ -100,3 +120,21 @@ class UpdateCar(LoginRequiredMixin,TestUserOfObject,UpdateView):
 class CarDeleteView(LoginRequiredMixin,TestUserOfObject,DeleteView):
     model = Car
     success_url = reverse_lazy('fillups:user_car_list')
+
+###############################################################################
+
+class Round(Func):
+  function = 'ROUND'
+  arity = 2
+
+def sum_total_sale(queryset):
+    total = 0
+    for row in queryset:
+        total += row.total_sale
+    return total
+
+def avg_mpg(queryset):
+    mpg_list = []
+    for row in queryset:
+        mpg_list.append(row.mpg)
+    return round(mean(mpg_list),4)

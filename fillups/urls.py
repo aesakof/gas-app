@@ -7,6 +7,7 @@ urlpatterns = [
     path('myprofile/',views.UserProfile.as_view(),name='user_profile'),
     path('myprofile/fillups/',views.UserFillupListView.as_view(),name='user_fillup_list'),
     path('myprofile/cars/',views.UserCarListView.as_view(),name='user_car_list'),
+    path('myprofile/stats/',views.UserStatsView.as_view(),name='user_stats'),
     path('all/fillups/',views.AllFillupListView.as_view(),name='all_fillup_list'),
     path('all/cars/',views.AllCarListView.as_view(),name='all_car_list'),
     path('new/fillup',views.NewFillup.as_view(success_url='/myprofile/fillups/'),name='new_fillup'),

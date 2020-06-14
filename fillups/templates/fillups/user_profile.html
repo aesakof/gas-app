@@ -2,10 +2,86 @@
 {% load bootstrap4 %}
 
 {% block content %}
-  <h1>Welcome to your profile!</h1>
+  <h1>{{ user.username }}'s Profile Overview</h1>
 
-  <h2>There's nothing here right now</h2>
+  <h3>Stats</h3>
+  <a href="{% url 'fillups:user_stats' %}">See all of {{ user.username }}'s stats</a>
 
-  <h3>I'll add stuff eventually</h3>
+  <p><strong>Number of Cars Owned:</strong> {{ stats.total_cars }}</p>
+  <p><strong>Number of Fillups Made:</strong> {{ stats.total_fillups }}</p>
+  <p><strong>Total Distance Driven:</strong> {{ stats.total_distance.trip_distance__sum }}</p>
+  <p><strong>Total Gallons Filled:</strong> {{ stats.total_gallons.total_gallons }}</p>
+  <p><strong>Average Price per Gallon:</strong> {{ stats.avg_price.price_per_gallon__avg }}</p>
+  <p><strong>Total $ Spent:</strong> {{ stats.total_spent }}</p>
+  <p><strong>Average Miles per Gallon:</strong> {{ stats.avg_mpg }}</p>
+
+
+  <br>
+  <h3>Active Cars</h3>
+  <a href="{% url 'fillups:user_car_list' %}">See all of {{ user.username }}'s cars</a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Car Name</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Model Year</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for car in active_cars %}
+        <div class="car">
+          <tr>
+            <td>{{ car.name }}</td>
+            <td>{{ car.make }}</td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.model_year }}</td>
+            <td>{{ car.status }}</td>
+            <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' pk=car.pk %}">Edit</a></td>
+            <td><a class="btn btn-danger" href="{% url 'fillups:delete_car' pk=car.pk %}">Delete</a></td>
+          </tr>
+        </div>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <br>
+  <h3>Last 10 Fillups</h3>
+  <a href="{% url 'fillups:user_fillup_list' %}">See all of {{ user.username }}'s fillups</a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Car</th>
+        <th>Price (per gallon)</th>
+        <th>Trip Distance</th>
+        <th>Gallons Filled</th>
+        <th>Total Sale</th>
+        <th>MPG</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fillup in last_10_fillups %}
+        <div class="fillup">
+          <tr>
+            <td>{{ fillup.date|date:"d M Y"}}</td>
+            <td>{{ fillup.car }}</td>
+            <td>{{ fillup.price_per_gallon }}</td>
+            <td>{{ fillup.trip_distance }}</td>
+            <td>{{ fillup.gallons }}</td>
+            <td>{{ fillup.total_sale }}</td>
+            <td>{{ fillup.mpg }}</td>
+            <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' pk=fillup.pk %}">Edit</a></td>
+            <td><a class="btn btn-danger" href="{% url 'fillups:delete_fillup' pk=fillup.pk %}">Delete</a></td>
+          </tr>
+        </div>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}

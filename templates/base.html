@@ -19,16 +19,30 @@
           <a class="nav-item nav-link" href="{% url 'fillups:all_fillup_list' %}">All Fillups</a>
           <a class="nav-item nav-link" href="{% url 'fillups:all_car_list' %}">All Cars</a>
           {% if user.is_authenticated %}
-            <a class="nav-item nav-link" href="{% url 'fillups:user_fillup_list' %}">My Fillups</a>
-            <a class="nav-item nav-link" href="{% url 'fillups:user_car_list' %}">My Cars</a>
-            <a class="nav-item nav-link" href="{% url 'fillups:new_fillup' %}">New Fillup</a>
-            <a class="nav-item nav-link" href="{% url 'fillups:new_car' %}">Register Car</a>
+            <div class="navbar-nav nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarProfileDropdown" href="#" data-toggle="dropdown">{{ user.username }}</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'fillups:user_profile' %}" class="btn btn-simple">Overview</a>
+                  <a class="dropdown-item" href="{% url 'fillups:user_stats' %}">My Stats</a>
+                  <a class="dropdown-item" href="{% url 'fillups:user_fillup_list' %}">My Fillups</a>
+                  <a class="dropdown-item" href="{% url 'fillups:user_car_list' %}">My Cars</a>
+                </div>
+            </div>
+            <div class="navbar-nav nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarNewItemDropdown" href="#" data-toggle="dropdown">+</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'fillups:new_fillup' %}">New Fillup</a>
+                  <a class="dropdown-item" href="{% url 'fillups:new_car' %}">Register Car</a>
+                </div>
+            </div>
+
+
           {% endif %}
         </div>
       </div>
+
       <div class="navbar-nav ml-auto">
         {% if user.is_authenticated %}
-          <a class="nav-item nav-link" href="{% url 'fillups:user_profile' %}" class="btn btn-simple">My Profile</a>
           <a class="nav-item nav-link" href="{% url 'accounts:logout' %}" class="btn btn-simple">Log out</a>
         {% else %}
           <a class="nav-item nav-link" href="{% url 'accounts:login' %}" class="btn btn-simple">Log in</a>
@@ -36,6 +50,7 @@
         {% endif %}
       </div>
     </nav>
+
 
     <div class="container mycontent">
       {% block content %}
