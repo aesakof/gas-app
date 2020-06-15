@@ -3,6 +3,7 @@ from django.views.generic import (TemplateView,ListView,DetailView,
                                     CreateView,UpdateView,DeleteView)
 from django.urls import reverse_lazy
 from django.db.models import Sum, Avg, F, Func
+from accounts.models import User
 from fillups.models import Fillup, Car
 from statistics import mean
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -17,11 +18,14 @@ class TestUserOfObject(UserPassesTestMixin):
 # Create your views here.
 class UserProfile(TemplateView):
     template_name = 'fillups/user_profile.html'
+    slug_field = "username"
+    slug_url_kwarg = "username"
 
     def get_context_data(self, **kwargs):
         context = super(UserProfile, self).get_context_data(**kwargs)
-        bunch_of_stats = {
-            'total_cars': Car.objects.filter(username=self.request.user).count(),
+        usr = get_object_or_404(User, username=kwargs.get("username"))
+        overview_stats = {
+            'total_cars': Car.objects.filter(username=usr).count(),
             'total_fillups': Fillup.objects.filter(username=self.request.user).count(),
             'total_distance': Fillup.objects.filter(username=self.request.user).aggregate(Sum('trip_distance')),
             'total_gallons': Fillup.objects.filter(username=self.request.user).aggregate(total_gallons = Round(Sum('gallons'),4)),
@@ -29,7 +33,7 @@ class UserProfile(TemplateView):
             'total_spent': sum_total_sale(Fillup.objects.filter(username=self.request.user)),
             'avg_mpg': avg_mpg(Fillup.objects.filter(username=self.request.user))
         }
-        context['stats'] = bunch_of_stats
+        context['stats'] = overview_stats
         context['active_cars'] = Car.objects.filter(status='Active').filter(username=self.request.user)
         context['last_10_fillups'] = Fillup.objects.filter(username=self.request.user).order_by('-date')[:10]
         return context

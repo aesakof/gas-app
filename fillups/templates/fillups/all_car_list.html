@@ -18,7 +18,7 @@
       {% for car in all_car_list %}
         <div class="car">
           <tr>
-            <td>{{ car.username }}</td>
+            <td><a href="{% url 'fillups:user_profile' username=car.username.username %}"></a>{{ car.username.username }}</td>
             <td>{{ car.name }}</td>
             <td>{{ car.make }}</td>
             <td>{{ car.model }}</td>
