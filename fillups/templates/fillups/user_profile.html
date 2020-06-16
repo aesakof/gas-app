@@ -5,7 +5,7 @@
   <h1>{{ user.username }}'s Profile Overview</h1>
 
   <h3>Stats</h3>
-  <a href="{% url 'fillups:user_stats' %}">See all of {{ user.username }}'s stats</a>
+  <a href="{% url 'fillups:user_stats' username=user.username %}">See all of {{ user.username }}'s stats</a>
 
   <p><strong>Number of Cars Owned:</strong> {{ stats.total_cars }}</p>
   <p><strong>Number of Fillups Made:</strong> {{ stats.total_fillups }}</p>
@@ -18,7 +18,7 @@
 
   <br>
   <h3>Active Cars</h3>
-  <a href="{% url 'fillups:user_car_list' %}">See all of {{ user.username }}'s cars</a>
+  <a href="{% url 'fillups:user_car_list' username=user.username %}">See all of {{ user.username }}'s cars</a>
   <table class="table">
     <thead>
       <tr>
@@ -40,8 +40,8 @@
             <td>{{ car.model }}</td>
             <td>{{ car.model_year }}</td>
             <td>{{ car.status }}</td>
-            <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' pk=car.pk %}">Edit</a></td>
-            <td><a class="btn btn-danger" href="{% url 'fillups:delete_car' pk=car.pk %}">Delete</a></td>
+            <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' username=user.username pk=car.pk %}">Edit</a></td>
+            <td><a class="btn btn-danger" href="{% url 'fillups:delete_car' username=user.username pk=car.pk %}">Delete</a></td>
           </tr>
         </div>
       {% endfor %}
@@ -50,7 +50,7 @@
 
   <br>
   <h3>Last 10 Fillups</h3>
-  <a href="{% url 'fillups:user_fillup_list' %}">See all of {{ user.username }}'s fillups</a>
+  <a href="{% url 'fillups:user_fillup_list' username=user.username %}">See all of {{ user.username }}'s fillups</a>
   <table class="table">
     <thead>
       <tr>

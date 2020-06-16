@@ -7,6 +7,6 @@
     <p>Are you sure you want to delete your car, <strong>{{ object }}</strong>?</p>
     <p>This will also delete all associated fillups.</p>
     <input type="submit" class="btn btn-danger" value="Confirm">
-    <a class="btn btn-secondary" href="{% url 'fillups:user_car_list' %}">Back</a>
+    <a class="btn btn-secondary" href="{% url 'fillups:user_car_list' username=user.username %}">Back</a>
   </form>
 {% endblock %}

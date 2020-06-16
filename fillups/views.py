@@ -26,16 +26,16 @@ class UserProfile(TemplateView):
         usr = get_object_or_404(User, username=kwargs.get("username"))
         overview_stats = {
             'total_cars': Car.objects.filter(username=usr).count(),
-            'total_fillups': Fillup.objects.filter(username=self.request.user).count(),
-            'total_distance': Fillup.objects.filter(username=self.request.user).aggregate(Sum('trip_distance')),
-            'total_gallons': Fillup.objects.filter(username=self.request.user).aggregate(total_gallons = Round(Sum('gallons'),4)),
-            'avg_price': Fillup.objects.filter(username=self.request.user).aggregate(avg_price = Round(Avg('price_per_gallon'),3)),
-            'total_spent': sum_total_sale(Fillup.objects.filter(username=self.request.user)),
-            'avg_mpg': avg_mpg(Fillup.objects.filter(username=self.request.user))
+            'total_fillups': Fillup.objects.filter(username=usr).count(),
+            'total_distance': Fillup.objects.filter(username=usr).aggregate(Sum('trip_distance')),
+            'total_gallons': Fillup.objects.filter(username=usr).aggregate(total_gallons = Round(Sum('gallons'),4)),
+            'avg_price': Fillup.objects.filter(username=usr).aggregate(avg_price = Round(Avg('price_per_gallon'),3)),
+            'total_spent': sum_total_sale(Fillup.objects.filter(username=usr)),
+            'avg_mpg': avg_mpg(Fillup.objects.filter(username=usr))
         }
         context['stats'] = overview_stats
-        context['active_cars'] = Car.objects.filter(status='Active').filter(username=self.request.user)
-        context['last_10_fillups'] = Fillup.objects.filter(username=self.request.user).order_by('-date')[:10]
+        context['active_cars'] = Car.objects.filter(status='Active').filter(username=usr)
+        context['last_10_fillups'] = Fillup.objects.filter(username=usr).order_by('-date')[:10]
         return context
 
 class UserStatsView(TemplateView):
@@ -139,6 +139,9 @@ def sum_total_sale(queryset):
 
 def avg_mpg(queryset):
     mpg_list = []
-    for row in queryset:
-        mpg_list.append(row.mpg)
-    return round(mean(mpg_list),4)
+    if len(queryset) == 0:
+        return 0
+    else:
+        for row in queryset:
+            mpg_list.append(row.mpg)
+        return round(mean(mpg_list),4)

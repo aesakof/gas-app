@@ -23,9 +23,9 @@
               <a class="nav-link dropdown-toggle" id="navbarProfileDropdown" href="#" data-toggle="dropdown">{{ user.username }}</a>
                 <div class="dropdown-menu">
                   <a class="dropdown-item" href="{% url 'fillups:user_profile' username=user.username %}" class="btn btn-simple">Overview</a>
-                  <a class="dropdown-item" href="{% url 'fillups:user_stats' %}">My Stats</a>
-                  <a class="dropdown-item" href="{% url 'fillups:user_fillup_list' %}">My Fillups</a>
-                  <a class="dropdown-item" href="{% url 'fillups:user_car_list' %}">My Cars</a>
+                  <a class="dropdown-item" href="{% url 'fillups:user_stats' username=user.username %}">My Stats</a>
+                  <a class="dropdown-item" href="{% url 'fillups:user_fillup_list' username=user.username %}">My Fillups</a>
+                  <a class="dropdown-item" href="{% url 'fillups:user_car_list' username=user.username %}">My Cars</a>
                 </div>
             </div>
             <div class="navbar-nav nav-item dropdown">

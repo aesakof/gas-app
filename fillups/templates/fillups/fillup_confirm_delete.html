@@ -6,6 +6,6 @@
     {% csrf_token %}
     <p>Are you sure you want to delete your fillup on: <strong>{{ object.date }}</strong>?</p>
     <input type="submit" class="btn btn-danger" value="Confirm">
-    <a class="btn btn-secondary" href="{% url 'fillups:user_fillup_list' %}">Back</a>
+    <a class="btn btn-secondary" href="{% url 'fillups:user_fillup_list' username=user.username %}">Back</a>
   </form>
 {% endblock %}

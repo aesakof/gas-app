@@ -31,8 +31,8 @@
             <td>{{ fillup.gallons }}</td>
             <td>{{ fillup.total_sale }}</td>
             <td>{{ fillup.mpg }}</td>
-            <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' pk=fillup.pk %}">Edit</a></td>
-            <td><a class="btn btn-danger" href="{% url 'fillups:delete_fillup' pk=fillup.pk %}">Delete</a></td>
+            <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' username=user.username pk=fillup.pk %}">Edit</a></td>
+            <td><a class="btn btn-danger" href="{% url 'fillups:delete_fillup' username=user.username pk=fillup.pk %}">Delete</a></td>
           </tr>
         </div>
       {% endfor %}
