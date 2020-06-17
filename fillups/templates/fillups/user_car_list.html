@@ -2,8 +2,10 @@
 
 {% block content %}
 <div class="centerstage">
-  <h1>My Cars</h1>
-  <a id="add_car" href="{% url 'fillups:new_car' %}">Register new car</a>
+  <h1>{{ profile_name }}'s Cars</h1>
+  {% if profile_name == user.username %}
+    <a id="add_car" href="{% url 'fillups:new_car' %}">Register new car</a>
+  {% endif %}
   <br>
   <br>
   <table class="table">
@@ -14,8 +16,10 @@
         <th>Model</th>
         <th>Model Year</th>
         <th>Status</th>
-        <th></th>
-        <th></th>
+        {% if profile_name == user.username %}
+          <th></th>
+          <th></th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -27,8 +31,10 @@
             <td>{{ car.model }}</td>
             <td>{{ car.model_year }}</td>
             <td>{{ car.status }}</td>
-            <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' username=user.username pk=car.pk %}">Edit</a></td>
-            <td><a class="btn btn-danger" href="{% url 'fillups:delete_car' username=user.username pk=car.pk %}">Delete</a></td>
+            {% if profile_name == user.username %}
+              <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' username=user.username pk=car.pk %}">Edit</a></td>
+              <td><a class="btn btn-danger" href="{% url 'fillups:delete_car' username=user.username pk=car.pk %}">Delete</a></td>
+            {% endif %}
           </tr>
         </div>
       {% endfor %}

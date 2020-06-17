@@ -20,7 +20,7 @@
       {% for fillup in all_fillup_list %}
         <div class="fillup">
           <tr>
-            <td>{{ fillup.username }}</td>
+            <td><a href="{% url 'fillups:user_profile' username=fillup.username %}">{{ fillup.username }}</a></td>
             <td>{{ fillup.date|date:"d M Y"}}</td>
             <td>{{ fillup.car }}</td>
             <td>{{ fillup.price_per_gallon }}</td>

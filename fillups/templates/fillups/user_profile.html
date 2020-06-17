@@ -2,23 +2,23 @@
 {% load bootstrap4 %}
 
 {% block content %}
-  <h1>{{ user.username }}'s Profile Overview</h1>
+  <h1>{{ profile_name }}'s Profile Overview</h1>
 
   <h3>Stats</h3>
-  <a href="{% url 'fillups:user_stats' username=user.username %}">See all of {{ user.username }}'s stats</a>
+  <a href="{% url 'fillups:user_stats' username=profile_name %}">See all of {{ profile_name }}'s stats</a>
 
   <p><strong>Number of Cars Owned:</strong> {{ stats.total_cars }}</p>
   <p><strong>Number of Fillups Made:</strong> {{ stats.total_fillups }}</p>
   <p><strong>Total Distance Driven:</strong> {{ stats.total_distance.trip_distance__sum }}</p>
   <p><strong>Total Gallons Filled:</strong> {{ stats.total_gallons.total_gallons }}</p>
-  <p><strong>Average Price per Gallon:</strong> {{ stats.avg_price.price_per_gallon__avg }}</p>
+  <p><strong>Average Price per Gallon:</strong> {{ stats.avg_price.avg_price }}</p>
   <p><strong>Total $ Spent:</strong> {{ stats.total_spent }}</p>
   <p><strong>Average Miles per Gallon:</strong> {{ stats.avg_mpg }}</p>
 
 
   <br>
   <h3>Active Cars</h3>
-  <a href="{% url 'fillups:user_car_list' username=user.username %}">See all of {{ user.username }}'s cars</a>
+  <a href="{% url 'fillups:user_car_list' username=profile_name %}">See all of {{ profile_name }}'s cars</a>
   <table class="table">
     <thead>
       <tr>
@@ -27,8 +27,10 @@
         <th>Model</th>
         <th>Model Year</th>
         <th>Status</th>
-        <th></th>
-        <th></th>
+        {% if profile_name == user.username %}
+          <th></th>
+          <th></th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -40,8 +42,10 @@
             <td>{{ car.model }}</td>
             <td>{{ car.model_year }}</td>
             <td>{{ car.status }}</td>
-            <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' username=user.username pk=car.pk %}">Edit</a></td>
-            <td><a class="btn btn-danger" href="{% url 'fillups:delete_car' username=user.username pk=car.pk %}">Delete</a></td>
+            {% if profile_name == user.username %}
+              <td><a class="btn btn-secondary" href="{% url 'fillups:update_car' username=profile_name pk=car.pk %}">Edit</a></td>
+              <td><a class="btn btn-danger" href="{% url 'fillups:delete_car' username=profile_name pk=car.pk %}">Delete</a></td>
+            {% endif %}
           </tr>
         </div>
       {% endfor %}
@@ -50,7 +54,7 @@
 
   <br>
   <h3>Last 10 Fillups</h3>
-  <a href="{% url 'fillups:user_fillup_list' username=user.username %}">See all of {{ user.username }}'s fillups</a>
+  <a href="{% url 'fillups:user_fillup_list' username=profile_name %}">See all of {{ profile_name }}'s fillups</a>
   <table class="table">
     <thead>
       <tr>
@@ -61,8 +65,10 @@
         <th>Gallons Filled</th>
         <th>Total Sale</th>
         <th>MPG</th>
-        <th></th>
-        <th></th>
+        {% if profile_name == user.username %}
+          <th></th>
+          <th></th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -76,8 +82,10 @@
             <td>{{ fillup.gallons }}</td>
             <td>{{ fillup.total_sale }}</td>
             <td>{{ fillup.mpg }}</td>
-            <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' pk=fillup.pk %}">Edit</a></td>
-            <td><a class="btn btn-danger" href="{% url 'fillups:delete_fillup' pk=fillup.pk %}">Delete</a></td>
+            {% if profile_name == user.username %}
+              <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' username=profile_name pk=fillup.pk %}">Edit</a></td>
+              <td><a class="btn btn-danger" href="{% url 'fillups:delete_fillup' username=profile_name pk=fillup.pk %}">Delete</a></td>
+            {% endif %}
           </tr>
         </div>
       {% endfor %}

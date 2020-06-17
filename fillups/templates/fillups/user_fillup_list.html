@@ -2,8 +2,10 @@
 
 {% block content %}
 <div class="centerstage">
-  <h1>My Fillups</h1>
-  <a id="add_fillup" href="{% url 'fillups:new_fillup' %}">Add new fillup</a>
+  <h1>{{ profile_name }}'s Fillups</h1>
+  {% if profile_name == user.username %}
+    <a id="add_fillup" href="{% url 'fillups:new_fillup' %}">Add new fillup</a>
+  {% endif %}
   <br>
   <br>
   <table class="table">
@@ -16,8 +18,10 @@
         <th>Gallons Filled</th>
         <th>Total Sale</th>
         <th>MPG</th>
-        <th></th>
-        <th></th>
+        {% if profile_name == user.username %}
+          <th></th>
+          <th></th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -31,8 +35,10 @@
             <td>{{ fillup.gallons }}</td>
             <td>{{ fillup.total_sale }}</td>
             <td>{{ fillup.mpg }}</td>
-            <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' username=user.username pk=fillup.pk %}">Edit</a></td>
-            <td><a class="btn btn-danger" href="{% url 'fillups:delete_fillup' username=user.username pk=fillup.pk %}">Delete</a></td>
+            {% if profile_name == user.username %}
+              <td><a class="btn btn-secondary" href="{% url 'fillups:update_fillup' username=user.username pk=fillup.pk %}">Edit</a></td>
+              <td><a class="btn btn-danger" href="{% url 'fillups:delete_fillup' username=user.username pk=fillup.pk %}">Delete</a></td>
+            {% endif %}
           </tr>
         </div>
       {% endfor %}
