@@ -2,10 +2,16 @@
 {% load bootstrap4 %}
 
 {% block content %}
-  <h1>{{ profile_name }}'s Profile Overview</h1>
+  <h1>{{ profile_name }}'s Profile</h1>
+  <nav class="nav nav-tabs nav-fill">
+    <a class="nav-item nav-link active" href="{% url 'fillups:user_profile' username=profile_name %}">Overview</a>
+    <a class="nav-item nav-link" href="{% url 'fillups:user_stats' username=profile_name %}">Stats</a>
+    <a class="nav-item nav-link" href="{% url 'fillups:user_fillup_list' username=profile_name %}">Fillups</a>
+    <a class="nav-item nav-link" href="{% url 'fillups:user_car_list' username=profile_name %}">Cars</a>
+  </nav>
+  <br>
 
-  <h3>Stats</h3>
-  <a href="{% url 'fillups:user_stats' username=profile_name %}">See all of {{ profile_name }}'s stats</a>
+  <h3>Overview Stats</h3>
 
   <p><strong>Number of Cars Owned:</strong> {{ stats.total_cars }}</p>
   <p><strong>Number of Fillups Made:</strong> {{ stats.total_fillups }}</p>
@@ -18,7 +24,6 @@
 
   <br>
   <h3>Active Cars</h3>
-  <a href="{% url 'fillups:user_car_list' username=profile_name %}">See all of {{ profile_name }}'s cars</a>
   <table class="table">
     <thead>
       <tr>
@@ -54,7 +59,6 @@
 
   <br>
   <h3>Last 10 Fillups</h3>
-  <a href="{% url 'fillups:user_fillup_list' username=profile_name %}">See all of {{ profile_name }}'s fillups</a>
   <table class="table">
     <thead>
       <tr>

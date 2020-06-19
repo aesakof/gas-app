@@ -43,6 +43,12 @@ class UserProfile(TemplateView):
 class UserStatsView(TemplateView):
     template_name = 'fillups/user_stats.html'
 
+    def get_context_data(self, **kwargs):
+        usr = get_object_or_404(User, username=self.kwargs.get("username"))
+        context = super(UserStatsView,self).get_context_data(**self.kwargs)
+        context['profile_name'] = usr.username
+        return context
+
 
 class UserFillupListView(ListView):
     template_name = 'fillups/user_fillup_list.html'

@@ -2,7 +2,15 @@
 
 {% block content %}
 <div class="centerstage">
-  <h1>{{ profile_name }}'s Fillups</h1>
+  <h1>{{ profile_name }}'s Profile</h1>
+  <nav class="nav nav-tabs nav-fill">
+    <a class="nav-item nav-link" href="{% url 'fillups:user_profile' username=profile_name %}">Overview</a>
+    <a class="nav-item nav-link" href="{% url 'fillups:user_stats' username=profile_name %}">Stats</a>
+    <a class="nav-item nav-link active" href="{% url 'fillups:user_fillup_list' username=profile_name %}">Fillups</a>
+    <a class="nav-item nav-link" href="{% url 'fillups:user_car_list' username=profile_name %}">Cars</a>
+  </nav>
+  <br>
+
   {% if profile_name == user.username %}
     <a id="add_fillup" href="{% url 'fillups:new_fillup' %}">Add new fillup</a>
   {% endif %}
