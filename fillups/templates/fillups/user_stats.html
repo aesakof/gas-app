@@ -11,8 +11,29 @@
   </nav>
   <br>
 
-  <h2>There is nothing here right now</h2>
+  <h2>Overall</h2>
+  <p><strong>Number of Cars Owned:</strong> {{ overview_stats.total_cars }}</p>
+  <p><strong>Number of Fillups Made:</strong> {{ overview_stats.total_fillups }}</p>
+  <p><strong>Total Distance Driven:</strong> {{ overview_stats.total_distance.trip_distance__sum }}</p>
+  <p><strong>Total Gallons Filled:</strong> {{ overview_stats.total_gallons.total_gallons }}</p>
+  <p><strong>Average Price per Gallon:</strong> {{ overview_stats.avg_price.avg_price }}</p>
+  <p><strong>Total $ Spent:</strong> {{ overview_stats.total_spent }}</p>
+  <p><strong>Average Miles per Gallon:</strong> {{ overview_stats.avg_mpg }}</p>
 
-  <h3>Deal with it</h3>
+  <br>
+  <h2>Stats per car</h2>
+  {% for car in stats_per_car %}
+    <div class="jumbotron">
+      <h3>{{ car.name }}</h3>
+      <p><strong>First Fillup:</strong> {{ car.first_fillup }}</p>
+      <p><strong>Most Recent Fillup:</strong> {{ car.last_fillup }}</p>
+      <p><strong>Number of Fillups:</strong> {{ car.fillups }}</p>
+      <p><strong>Distance Driven:</strong> {{ car.distance.trip_distance__sum }}</p>
+      <p><strong>Gallons Filled:</strong> {{ car.gallons.total_gallons }}</p>
+      <p><strong>Average Price per Gallon:</strong> {{ car.avg_price.avg_price }}</p>
+      <p><strong>Average MPG:</strong> {{ car.avg_mpg }}</p>
+      <p><strong>Total # Spent:</strong> {{ car.total_spent }}</p>
+    </div>
+  {% endfor %}
 
 {% endblock %}

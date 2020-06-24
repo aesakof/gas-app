@@ -44,9 +44,37 @@ class UserStatsView(TemplateView):
     template_name = 'fillups/user_stats.html'
 
     def get_context_data(self, **kwargs):
-        usr = get_object_or_404(User, username=self.kwargs.get("username"))
-        context = super(UserStatsView,self).get_context_data(**self.kwargs)
+        context = super(UserStatsView, self).get_context_data(**kwargs)
+        usr = get_object_or_404(User, username=kwargs.get("username"))
+        overview_stats = {
+            'total_cars': Car.objects.filter(username=usr).count(),
+            'total_fillups': Fillup.objects.filter(username=usr).count(),
+            'total_distance': Fillup.objects.filter(username=usr).aggregate(Sum('trip_distance')),
+            'total_gallons': Fillup.objects.filter(username=usr).aggregate(total_gallons = Round(Sum('gallons'),4)),
+            'avg_price': Fillup.objects.filter(username=usr).aggregate(avg_price = Round(Avg('price_per_gallon'),3)),
+            'total_spent': sum_total_sale(Fillup.objects.filter(username=usr)),
+            'avg_mpg': avg_mpg(Fillup.objects.filter(username=usr))
+        }
+
+        stats_per_car = []
+
+        for car in Car.objects.filter(username=usr):
+            car_stat = {}
+            print(car.name)
+            car_stat["name"] = car.name
+            car_stat["fillups"] = Fillup.objects.filter(username=usr,car=car).count()
+            car_stat["distance"] = Fillup.objects.filter(username=usr,car=car).aggregate(Sum('trip_distance'))
+            car_stat["gallons"] = Fillup.objects.filter(username=usr,car=car).aggregate(total_gallons = Round(Sum('gallons'),4))
+            car_stat["avg_price"] = Fillup.objects.filter(username=usr,car=car).aggregate(avg_price = Round(Avg('price_per_gallon'),3))
+            car_stat["total_spent"] = sum_total_sale(Fillup.objects.filter(username=usr,car=car))
+            car_stat["avg_mpg"] = avg_mpg(Fillup.objects.filter(username=usr,car=car))
+            car_stat["first_fillup"] = Fillup.objects.values_list('date',flat=True).filter(username=usr,car=car).earliest('date')
+            car_stat["last_fillup"] = Fillup.objects.values_list('date',flat=True).filter(username=usr,car=car).latest('date')
+            stats_per_car.append(car_stat)
+
         context['profile_name'] = usr.username
+        context['overview_stats'] = overview_stats
+        context['stats_per_car'] = stats_per_car
         return context
 
 

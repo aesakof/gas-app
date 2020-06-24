@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date, datetime
+from django.core.validators import MinValueValidator
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -14,9 +15,9 @@ STATUS = [('Active', 'Active'), ('Inactive', 'Inactive')]
 class Fillup(models.Model):
     username = models.ForeignKey(User,on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
-    price_per_gallon = models.FloatField()
-    trip_distance = models.FloatField()
-    gallons = models.FloatField()
+    price_per_gallon = models.FloatField(validators=[MinValueValidator(0.0)])
+    trip_distance = models.FloatField(validators=[MinValueValidator(0.0)])
+    gallons = models.FloatField(validators=[MinValueValidator(0.0)])
     car = models.ForeignKey('Car',on_delete=models.CASCADE)
 
     @property
@@ -25,7 +26,10 @@ class Fillup(models.Model):
 
     @property
     def mpg(self):
-        return round(self.trip_distance/self.gallons, 4)
+        if self.gallons == 0:
+            return 0
+        else:
+            return round(self.trip_distance/self.gallons, 4)
 
 
 class Car(models.Model):
